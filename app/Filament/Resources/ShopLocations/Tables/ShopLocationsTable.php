@@ -17,7 +17,10 @@ class ShopLocationsTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('address')
-                    ->searchable(),
+                    ->label('Address')
+                    ->limit(30)           // show first 30 characters + "…"
+                    ->tooltip(fn ($record) => $record->address) // optional: full address on hover
+                    ->wrap(false), 
                 TextColumn::make('city')
                     ->searchable(),
                 TextColumn::make('phone')

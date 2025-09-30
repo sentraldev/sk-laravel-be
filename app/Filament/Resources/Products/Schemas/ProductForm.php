@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Products\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
 
 class ProductForm
@@ -13,31 +15,50 @@ class ProductForm
     {
         return $schema
             ->components([
-                TextInput::make('brand_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('category_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('sub_category_id')
-                    ->numeric(),
+                TextInput::make('name')
+                    ->columnSpanFull()
+                    ->required(),
+                Select::make('brand_id')
+                    ->label('Brand')
+                    ->relationship('brand', 'name') // ✅ fetches from brands table
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                Select::make('category_id')
+                    ->label('Category')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                Select::make('sub_category_id')
+                    ->label('Sub Category')
+                    ->relationship('subCategory', 'name')
+                    ->searchable()
+                    ->preload(),
                 TextInput::make('sku')
                     ->label('SKU')
-                    ->required(),
-                TextInput::make('name')
                     ->required(),
                 Textarea::make('description')
                     ->columnSpanFull(),
                 TextInput::make('price')
-                    ->required()
+                    ->label('Price (Rp)')
                     ->numeric()
-                    ->default(0)
-                    ->prefix('$'),
+                    ->prefix('Rp') // ✅ show Rp in UI
+                    ->required(),
                 TextInput::make('stock')
                     ->required()
                     ->numeric()
                     ->default(0),
-                TextInput::make('images'),
+                FileUpload::make('images')
+                    ->label('Product Photos')
+                    ->image() // ✅ restricts to images
+                    ->multiple()
+                    ->reorderable()
+                    ->maxFiles(5) 
+                    ->imageEditor() // optional: adds crop/resize UI
+                    ->maxSize(2048) // 2 MB limit
+                    ->directory('products') // stored in storage/app/public/brands
+                    ->required(),
                 Toggle::make('is_active')
                     ->required(),
             ]);

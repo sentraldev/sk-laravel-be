@@ -16,4 +16,9 @@ class Product extends Model
     public function category() { return $this->belongsTo(Category::class); }
     public function subCategory() { return $this->belongsTo(SubCategory::class); }
     public function promos() { return $this->belongsToMany(Promo::class); }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
 }

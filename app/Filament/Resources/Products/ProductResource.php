@@ -15,12 +15,15 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
     protected static string|UnitEnum|null $navigationGroup = 'Shop Management';
+    protected static ?string $title = 'Custom Page Title';
+    
 
     public static function form(Schema $schema): Schema
     {
@@ -35,7 +38,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\Resources\Products\RelationManagers\ReviewsRelationManager::class,
         ];
     }
 

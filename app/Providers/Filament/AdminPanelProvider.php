@@ -36,6 +36,8 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->brandName('Sentral Komputer')
+            ->navigationGroups(['Shop Management', 'Marketing', 'Locations', 'Blog'])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
