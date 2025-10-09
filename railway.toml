@@ -8,7 +8,11 @@ builder = "RAILPACK"
 # buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction"
 
 # optional: uncomment this if you use Vite / npm
-buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction && npm ci && npm run build"
+buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction \
+&& npm ci --no-audit --no-fund \
+&& npm rebuild \
+&& npm run build
+"
 
 [deploy]
 # Run migrations automatically, then start Laravel server
