@@ -5,10 +5,10 @@
 [build]
 builder = "RAILPACK"
 # Install PHP deps only (no scripts) to speed up build
-buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction"
+# buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction"
 
 # optional: uncomment this if you use Vite / npm
-# buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction && npm ci && npm run build"
+buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction && npm ci && npm run build"
 
 [deploy]
 # Run migrations automatically, then start Laravel server
