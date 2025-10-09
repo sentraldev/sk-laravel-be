@@ -4,6 +4,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
+        "postinstall": "rm -rf node_modules/.cache || true",
         "dev": "vite"
     },
     "devDependencies": {
