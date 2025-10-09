@@ -40,7 +40,7 @@ class LaptopRowsImport implements ToCollection
                     'processor' => $assoc['processor'] ?? null,
                     'gpu' => $assoc['gpu'] ?? null,
                     'ram_size' => $this->normalizeInt($assoc['ram'] ?? null),
-                    'storage_size' => $this->normalizeInt($assoc['ssd'] ?? null),
+                    'storage_size' => $this->normalizeStorageSize($assoc['ssd'] ?? null),
                     'specs' => $assoc['specs'] ?? null,
                     'price' => $this->normalizeMoney($assoc['price'] ?? null),
                     'discounted_price' => $this->normalizeMoney($assoc['discounted_price'] ?? null),
@@ -58,7 +58,7 @@ class LaptopRowsImport implements ToCollection
                     'processor' => Arr::get($arr, 3),
                     'gpu' => Arr::get($arr, 4),
                     'ram_size' => $this->normalizeInt(Arr::get($arr, 5)),
-                    'storage_size' => $this->normalizeInt(Arr::get($arr, 6)),
+                    'storage_size' => $this->normalizeStorageSize(Arr::get($arr, 6)),
                     'specs' => Arr::get($arr, 7),
                     'price' => $this->normalizeMoney(Arr::get($arr, 8)),
                     'discounted_price' => $this->normalizeMoney(Arr::get($arr, 9)),
@@ -156,6 +156,54 @@ class LaptopRowsImport implements ToCollection
             return null;
         }
         if (is_numeric($value)) return (int) $value;
+        return null;
+    }
+
+    /**
+     * Normalize storage size strings to GB (integer).
+     * Accepts formats like "512", "512GB", "1 TB", "1.5TB", "1TB + 256GB".
+     * - TB will be converted to GB using 1 TB = 1024 GB.
+     * - If unit is omitted, assumes GB.
+     */
+    private function normalizeStorageSize($value): ?int
+    {
+        if ($value === null) return null;
+
+        // If it's purely numeric, assume GB
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        if (is_string($value)) {
+            $str = strtolower(trim($value));
+
+            // Split on '+' to allow summing parts like "1tb + 256gb"
+            $parts = preg_split('/\s*\+\s*/', $str);
+            $totalGb = 0.0;
+            $found = false;
+
+            foreach ($parts as $part) {
+                // Extract first number and optional unit
+                if (preg_match('/([0-9]*\.?[0-9]+)\s*(tb|gb)?/', $part, $m)) {
+                    $num = (float) $m[1];
+                    $unit = $m[2] ?? 'gb';
+                    if ($unit === 'tb') {
+                        $totalGb += $num * 1024.0; // Convert TB -> GB
+                    } else {
+                        $totalGb += $num; // Treat as GB
+                    }
+                    $found = true;
+                }
+            }
+
+            if ($found) {
+                return (int) round($totalGb);
+            }
+
+            // Fallback to integer extraction logic
+            return $this->normalizeInt($value);
+        }
+
         return null;
     }
 
