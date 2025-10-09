@@ -39,6 +39,8 @@ class ProductForm
                     ->label('SKU')
                     ->required(),
                 Textarea::make('description')
+                    ->label('Description')
+                    ->rows(15)
                     ->columnSpanFull(),
                 TextInput::make('price')
                     ->label('Price (Rp)')

@@ -18,7 +18,7 @@ class LaptopForm
             TextInput::make('gpu')->label('GPU'),
             TextInput::make('ram_size')->numeric()->minValue(0)->suffix(' GB')->label('RAM Size'),
             TextInput::make('storage_size')->numeric()->minValue(0)->suffix(' GB')->label('Storage Size'),
-            Textarea::make('specs')->label('Specs')->rows(8)->columnSpanFull(),
+            Textarea::make('specs')->label('Specs')->rows(15)->columnSpanFull(),
 
             // optional relation to existing product
             Select::make('product_id')
