@@ -9,6 +9,7 @@ use App\Filament\Resources\ProductReviews\Schemas\ProductReviewForm;
 use App\Filament\Resources\ProductReviews\Tables\ProductReviewsTable;
 use App\Models\ProductReview;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,8 +20,8 @@ class ProductReviewResource extends Resource
     protected static ?string $model = ProductReview::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
-    
+    protected static string|UnitEnum|null $navigationGroup = 'Product';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
