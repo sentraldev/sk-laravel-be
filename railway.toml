@@ -9,9 +9,7 @@ builder = "RAILPACK"
 
 # optional: uncomment this if you use Vite / npm
 buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction \
-&& rm -rf node_modules package-lock.json \
-&& npm set cache /tmp/empty-cache --global \
-&& npm ci --no-audit --no-fund --ignore-scripts --foreground-scripts \
+&& npm ci --no-audit --no-fund --cache /tmp/empty-cache \
 && npm run build --no-progress"
 
 [deploy]
@@ -20,6 +18,7 @@ startCommand = "php artisan migrate --force && php artisan serve --host=0.0.0.0 
 
 # optional: run seeds on deploy
 # preDeployCommand = "php artisan db:seed --force"
+preDeployCommand = "rm -rf node_modules .cache package-lock.json && composer dump-autoload -o"
 
 # optional health check
 # healthcheckPath = "/"
