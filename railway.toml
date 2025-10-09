@@ -10,7 +10,7 @@ builder = "RAILPACK"
 # optional: uncomment this if you use Vite / npm
 buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction \
 && npm ci --no-audit --no-fund \
-&& npm rebuild \
+&& rm -rf node_modules/.cache \
 && npm run build"
 
 [deploy]
