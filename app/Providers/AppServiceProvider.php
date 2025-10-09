@@ -25,8 +25,11 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         Request::setTrustedProxies(
-        ['*'], // trust all proxies
-        Request::HEADER_X_FORWARDED_ALL
-    );
+            ['*'], // trust all proxies
+        Request::HEADER_X_FORWARDED_FOR
+        | Request::HEADER_X_FORWARDED_HOST
+        | Request::HEADER_X_FORWARDED_PORT
+        | Request::HEADER_X_FORWARDED_PROTO
+        );
     }
 }
