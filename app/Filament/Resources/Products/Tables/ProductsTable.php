@@ -48,6 +48,11 @@ class ProductsTable
                     ->money('idr', true)
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('discounted_price')
+                    ->label('Discounted')
+                    ->money('idr', true)
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),

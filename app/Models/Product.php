@@ -9,7 +9,7 @@ class Product extends Model
     protected $casts = ['images' => 'array'];
     protected $fillable = [
         'brand_id','category_id','sub_category_id',
-        'sku','name','description','price','stock','images','is_active'
+        'sku','name','description','price','discounted_price','stock','images','is_active'
     ];
 
     public function brand() { return $this->belongsTo(Brand::class); }
@@ -20,5 +20,15 @@ class Product extends Model
     public function reviews()
     {
         return $this->hasMany(ProductReview::class);
+    }
+
+    public function laptop()
+    {
+        return $this->hasOne(Laptop::class);
+    }
+
+    public function discounts()
+    {
+        return $this->hasMany(ProductDiscount::class);
     }
 }

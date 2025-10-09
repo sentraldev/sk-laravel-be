@@ -45,6 +45,10 @@ class ProductForm
                     ->numeric()
                     ->prefix('Rp') // ✅ show Rp in UI
                     ->required(),
+                TextInput::make('discounted_price')
+                    ->label('Discounted Price (Rp)')
+                    ->numeric()
+                    ->prefix('Rp'),
                 TextInput::make('stock')
                     ->required()
                     ->numeric()

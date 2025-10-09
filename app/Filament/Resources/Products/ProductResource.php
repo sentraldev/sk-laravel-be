@@ -37,7 +37,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            \App\Filament\Resources\Products\RelationManagers\ReviewsRelationManager::class,
+            // Reviews temporarily removed
         ];
     }
 
