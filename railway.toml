@@ -11,8 +11,7 @@ builder = "RAILPACK"
 buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction \
 && npm ci --no-audit --no-fund \
 && npm rebuild \
-&& npm run build
-"
+&& npm run build"
 
 [deploy]
 # Run migrations automatically, then start Laravel server
