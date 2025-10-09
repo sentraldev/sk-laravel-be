@@ -2,23 +2,22 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
+use Illuminate\Http\Middleware\TrustProxies as Middleware;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class TrustProxies
+class TrustProxies extends Middleware
 {
+    /**
+     * The trusted proxies for this application.
+     *
+     * @var array|string|null
+     */
     protected $proxies = '*';
-    protected $headers = \Illuminate\Http\Request::HEADER_X_FORWARDED_ALL;
-
 
     /**
-     * Handle an incoming request.
+     * The headers that should be used to detect proxies.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @var int
      */
-    public function handle(Request $request, Closure $next): Response
-    {
-        return $next($request);
-    }
+    protected $headers = Request::HEADER_X_FORWARDED_ALL;
 }
