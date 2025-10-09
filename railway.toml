@@ -12,7 +12,7 @@ buildCommand = "composer install --optimize-autoloader --no-scripts --no-interac
 
 [deploy]
 # Run migrations automatically, then start Laravel server
-startCommand = "php artisan migrate --force && php artisan serve"
+startCommand = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
 
 # optional: run seeds on deploy
 # preDeployCommand = "php artisan db:seed --force"
