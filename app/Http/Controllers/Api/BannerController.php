@@ -15,7 +15,7 @@ class BannerController extends Controller
         $banners = Banner::where('is_active', true)
             ->latest()
             ->limit(10)
-            ->paginate(10);
+            ->get();
 
         return BannerResource::collection($banners);
     }
