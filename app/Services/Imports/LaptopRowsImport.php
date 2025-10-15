@@ -109,6 +109,12 @@ class LaptopRowsImport implements ToCollection
         if (is_numeric($discounted)) {
             $product->discounted_price = $discounted;
         }
+        // Calculate discount percentage if both are numeric
+        if (is_numeric($price) && $price > 0 && is_numeric($discounted) && $discounted >= 0 && $discounted <= $price) {
+            $percent = (int) round(100 - (($discounted / $price) * 100));
+            $percent = max(0, min(100, $percent));
+            $product->discount_value = $percent;
+        }
         $product->stock = $product->stock ?? 0;
         $product->is_active = $product->is_active ?? true;
         $product->save();

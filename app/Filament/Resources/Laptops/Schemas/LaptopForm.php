@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Laptops\Schemas;
 
+use App\Models\Brand;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -13,7 +14,12 @@ class LaptopForm
     {
         return $schema->components([
             TextInput::make('name')->required()->columnSpanFull(),
-            TextInput::make('brand')->required(),
+            Select::make('brand')
+                ->label('Brand')
+                ->options(fn (): array => Brand::query()->orderBy('name')->pluck('name', 'name')->all())
+                ->searchable()
+                ->preload()
+                ->required(),
             TextInput::make('processor')->label('Processor'),
             TextInput::make('gpu')->label('GPU'),
             TextInput::make('ram_size')->numeric()->minValue(0)->suffix(' GB')->label('RAM Size'),

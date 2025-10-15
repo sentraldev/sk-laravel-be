@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Laptops\Tables;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Tables;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -62,10 +64,59 @@ class LaptopsTable
                     ->icon('heroicon-o-arrow-up-right')
                     ->visible(fn ($record) => ! $record->product_id)
                     ->form([
-                        TextInput::make('sku')->label('SKU')->required(),
-                        TextInput::make('price')->label('Price')->numeric()->minValue(0)->required(),
-                        TextInput::make('discounted_price')->label('Discounted Price')->numeric()->minValue(0),
-                        TextInput::make('stock')->label('Stock')->numeric()->default(0),
+                        TextInput::make('sku')
+                            ->label('SKU')
+                            ->required(),
+                        TextInput::make('price')
+                            ->label('Price')
+                            ->numeric()
+                            ->minValue(0)
+                            ->required()
+                            ->live(debounce: 300)
+                            ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                $price = (float) ($state ?? 0);
+                                $percent = $get('discount_value');
+                                $discounted = $get('discounted_price');
+                                if ($price > 0 && is_numeric($percent)) {
+                                    $set('discounted_price', (int) round($price * (1 - ((int) $percent / 100))));
+                                } elseif ($price > 0 && is_numeric($discounted)) {
+                                    $calc = (int) round(100 - (((float) $discounted / $price) * 100));
+                                    $set('discount_value', max(0, min(100, $calc)));
+                                }
+                            }),
+                        TextInput::make('discount_value')
+                            ->label('Discount %')
+                            ->numeric()
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->suffix('%')
+                            ->live(debounce: 300)
+                            ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                $price = (float) ($get('price') ?? 0);
+                                $percent = (int) ($state ?? 0);
+                                $percent = max(0, min(100, $percent));
+                                if ($price > 0) {
+                                    $discounted = (int) round($price * (1 - ($percent / 100)));
+                                    $set('discounted_price', $discounted);
+                                }
+                            }),
+                        TextInput::make('discounted_price')
+                            ->label('Discounted Price')
+                            ->numeric()
+                            ->minValue(0)
+                            ->live(debounce: 300)
+                            ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                $price = (float) ($get('price') ?? 0);
+                                $discounted = (float) ($state ?? 0);
+                                if ($price > 0 && $discounted >= 0) {
+                                    $percent = (int) round(100 - (($discounted / $price) * 100));
+                                    $set('discount_value', max(0, min(100, $percent)));
+                                }
+                            }),
+                        TextInput::make('stock')
+                            ->label('Stock')
+                            ->numeric()
+                            ->default(0),
                     ])
                     ->action(function ($record, array $data): void {
                         // Resolve models without imports
