@@ -18,8 +18,28 @@ class ListLaptops extends ListRecords
     {
         return [
             CreateAction::make(),
+            Action::make('import')
+                ->label('Import Laptops')
+                ->icon('heroicon-o-arrow-up-on-square')
+                ->form([
+                    FileUpload::make('file')
+                        ->label('Excel/CSV File')
+                        ->preserveFilenames()
+                        ->acceptedFileTypes(['text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel'])
+                        ->directory('imports')
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    // Defer to importer job/class
+                    \App\Services\Imports\LaptopImporter::import($data['file']);
+                    Notification::make()
+                        ->title('Import started')
+                        ->body('Check the Laptops table for new records.')
+                        ->success()
+                        ->send();
+                }),
             Action::make('importImages')
-                ->label('Import Images by Filename (sku-x.ext)')
+                ->label('Import Images by Filename (sku-x.png)')
                 ->icon('heroicon-o-photo')
                 ->form([
                     FileUpload::make('images')
