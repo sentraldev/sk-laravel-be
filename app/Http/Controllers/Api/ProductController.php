@@ -19,4 +19,16 @@ class ProductController extends Controller
 
         return ProductResource::collection($products);
     }
+
+    public function new_arrival(Request $request): ResourceCollection
+    {
+        $products = Product::with(['brand', 'laptop'])
+            ->where('is_active', true)
+            ->latest()
+            ->limit(6)
+            ->get();
+
+        
+        return ProductResource::collection($products);
+    }
 }
