@@ -38,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->brandName('Sentral Komputer')
-            ->maxContentWidth(Width::ScreenTwoExtraLarge)
+            ->maxContentWidth(Width::Full)
             ->navigationGroups(['Shop Management', 'Product', 'Marketing', 'Locations', 'Blog'])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([

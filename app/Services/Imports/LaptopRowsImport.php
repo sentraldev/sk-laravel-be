@@ -84,13 +84,15 @@ class LaptopRowsImport implements ToCollection
         }
 
         // Ensure base refs
+        $brandSlug = Str::slug($brandName);
         $brand = Brand::firstOrCreate(
-            ['name' => $brandName],
-            ['slug' => Str::slug($brandName)]
+            ['slug' => $brandSlug],
+            ['name' => $brandName]
         );
+        $categorySlug = Str::slug('Laptop');
         $category = Category::firstOrCreate(
-            ['name' => 'Laptop'],
-            ['slug' => Str::slug('Laptop')]
+            ['slug' => $categorySlug],
+            ['name' => 'Laptop']
         );
 
         // Create or update Product by SKU if present, else by name+brand

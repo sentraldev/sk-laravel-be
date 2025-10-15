@@ -96,6 +96,7 @@ class ProductForm
                 FileUpload::make('images')
                     ->label('Product Photos')
                     ->image() // ✅ restricts to images
+                    ->disk('public')
                     ->multiple()
                     ->reorderable()
                     ->maxFiles(5) 

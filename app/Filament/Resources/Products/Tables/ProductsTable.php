@@ -17,6 +17,7 @@ class ProductsTable
             ->columns([
                 Tables\Columns\ImageColumn::make('images')
                     ->label('Photo')
+                    ->disk('public')
                     ->circular()
                     ->stacked()
                     ->limit(1), // ✅ show up to 1 image in the table

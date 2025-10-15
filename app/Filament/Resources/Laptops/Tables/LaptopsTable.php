@@ -120,13 +120,15 @@ class LaptopsTable
                     ])
                     ->action(function ($record, array $data): void {
                         // Resolve models without imports
+                        $brandSlug = \Illuminate\Support\Str::slug($record->brand);
                         $brandModel = \App\Models\Brand::firstOrCreate(
-                            ['name' => $record->brand],
-                            ['slug' => \Illuminate\Support\Str::slug($record->brand)]
+                            ['slug' => $brandSlug],
+                            ['name' => $record->brand]
                         );
+                        $categorySlug = \Illuminate\Support\Str::slug('Laptop');
                         $categoryModel = \App\Models\Category::firstOrCreate(
-                            ['name' => 'Laptop'],
-                            ['slug' => \Illuminate\Support\Str::slug('Laptop')]
+                            ['slug' => $categorySlug],
+                            ['name' => 'Laptop']
                         );
 
                         $price = $data['price'] ?? null;
