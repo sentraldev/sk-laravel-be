@@ -23,8 +23,8 @@ class ProductResource extends JsonResource
             'laptop' => $this->laptop ? [
                 'processor' => $this->laptop->processor,
                 'gpu' => $this->laptop->gpu,
-                'ram' => $this->laptop->ram,
-                'storage' => $this->laptop->storage,
+                'ram' => $this->laptop->ram_size,
+                'storage' => $this->laptop->storage_size,
                 'specs' => $this->laptop->specs,
             ] : null,
         ];
