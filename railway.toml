@@ -1,0 +1,48 @@
+# railway.toml
+# Laravel 12 + Filament 4 + PostgreSQL
+# Using Railpack builder (Nixpacks is deprecated)
+
+[build]
+builder = "RAILPACK"
+# Install PHP deps only (no scripts) to speed up build
+# buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction"
+
+# optional: uncomment this if you use Vite / npm
+buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction && npm install --omit=dev --no-audit --no-fund && npm run build --no-progress"
+
+[deploy]
+# Run migrations automatically, then start Laravel server
+startCommand = "php artisan migrate --force && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=$PORT"
+
+# optional: run seeds on deploy
+# preDeployCommand = "php artisan db:seed --force"
+# preDeployCommand = "rm -rf node_modules .cache package-lock.json && composer dump-autoload -o"
+
+# optional health check
+# healthcheckPath = "/"
+
+[env]
+# If your Railway service is linked to a PostgreSQL plugin,
+# this DATABASE_URL will be automatically injected.
+# APP_ENV = "production"
+# APP_DEBUG = "false"
+# APP_URL = "https://${RAILWAY_STATIC_URL}"
+# LOG_CHANNEL = "stderr"
+# LOG_LEVEL = "info"
+
+# Make sure this matches your database settings
+DB_CONNECTION = "pgsql"
+DB_HOST = "${PG_Laravel.PGHOST}"
+DB_PORT = "${PG_Laravel.PGPORT}"
+DB_DATABASE = "${PG_Laravel.PGDATABASE}"
+DB_USERNAME = "${PG_Laravel.PGUSER}"
+DB_PASSWORD = "${PG_Laravel.PGPASSWORD}"
+
+# PHP extensions dependencies (set these in Railway variables section)
+# Example: apt libs for php extensions used by Filament/Laravel
+# RAILPACK_BUILD_APT_PACKAGES="libpq-dev libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libicu-dev"
+
+# Laravel cache / session
+CACHE_DRIVER = "file"
+SESSION_DRIVER = "file"
+QUEUE_CONNECTION = "database"

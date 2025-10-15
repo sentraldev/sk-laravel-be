@@ -13,8 +13,8 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 
-    public function serviceCenters()
+    public function shopLocations()
     {
-        return $this->hasMany(ServiceCenter::class);
+        return $this->belongsToMany(ShopLocation::class, 'shop_location_brand');
     }
 }

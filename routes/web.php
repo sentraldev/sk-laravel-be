@@ -2,6 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Redirect root to Filament admin
+Route::redirect('/', '/admin');

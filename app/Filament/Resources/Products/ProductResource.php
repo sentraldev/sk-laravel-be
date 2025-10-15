@@ -15,13 +15,15 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
-    protected static string|UnitEnum|null $navigationGroup = 'Shop Management';
-
+    protected static string|UnitEnum|null $navigationGroup = 'Product';
+    protected static ?int $navigationSort = 1;
+    
     public static function form(Schema $schema): Schema
     {
         return ProductForm::configure($schema);
@@ -35,7 +37,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // Reviews temporarily removed
         ];
     }
 

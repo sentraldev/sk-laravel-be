@@ -5,43 +5,68 @@ namespace App\Filament\Resources\Products\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Tables;
 use Filament\Tables\Table;
 
 class ProductsTable
 {
+    
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('brand_id')
-                    ->numeric()
+                Tables\Columns\ImageColumn::make('images')
+                    ->label('Photo')
+                    ->disk('public')
+                    ->circular()
+                    ->stacked()
+                    ->limit(1), // ✅ show up to 1 image in the table
+
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('category_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('sub_category_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('sku')
+
+                Tables\Columns\TextColumn::make('brand.name')
+                    ->label('Brand')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('subCategory.name')
+                    ->label('Sub Category')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('sku')
                     ->label('SKU')
                     ->searchable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('price')
-                    ->money()
+
+                Tables\Columns\TextColumn::make('price')
+                    ->money('idr', true)
                     ->sortable(),
-                TextColumn::make('stock')
+
+                Tables\Columns\TextColumn::make('discounted_price')
+                    ->label('Discounted')
+                    ->money('idr', true)
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
-                IconColumn::make('is_active')
+
+                Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
-                TextColumn::make('created_at')
+
+                Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
+
+                Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
