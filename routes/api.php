@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ShopLocationController;
 
 Route::prefix('v1')->group(function () {
 	Route::prefix('products')->group(function () {
@@ -21,5 +22,9 @@ Route::prefix('v1')->group(function () {
 
 	Route::prefix('brands')->group(function () {
 		Route::get('/', [BrandController::class, 'index']);
+	});
+
+	Route::prefix('location')->group(function () {
+		Route::get('/', [ShopLocationController::class,'index']);	
 	});
 });

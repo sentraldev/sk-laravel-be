@@ -162,6 +162,7 @@ class ProductForm
                     ->multiple()
                     ->reorderable()
                     ->maxFiles(5) 
+                    ->panelLayout('grid')
                     ->imageEditor() // optional: adds crop/resize UI
                     ->maxSize(2048) // 2 MB limit
                     ->directory('products') // stored in storage/app/public/brands
