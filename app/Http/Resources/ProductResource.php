@@ -23,21 +23,29 @@ class ProductResource extends JsonResource
             }, $images)));
         }
 
-        return [
+        // Base payload
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
-            'brand' => $this->brand?->name,
+            'slug' => $this->slug,
             'price' => $this->price,
             'discounted_price' => $this->discounted_price,
             'discount_value' => $this->discount_value,
             'images' => $images,
-            'laptop' => $this->laptop ? [
-                'processor' => $this->laptop->processor,
-                'gpu' => $this->laptop->gpu,
-                'ram' => $this->laptop->ram_size,
-                'storage' => $this->laptop->storage_size,
-                'specs' => $this->laptop->specs,
-            ] : null,
+            'brand' => $this->brand,
+            'category' => $this->category,
         ];
+
+        // Replace the 'laptop' section with a dynamic key based on the category name
+        // and set its content to the product's details
+        $categoryName = data_get($this->category, 'name');
+        if ($categoryName) {
+            $data[strtolower($categoryName)] = $this->details;
+        } else {
+            // Fallback if category name is missing
+            $data['details'] = $this->details;
+        }
+
+        return $data;
     }
 }

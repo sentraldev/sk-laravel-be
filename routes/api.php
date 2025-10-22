@@ -11,6 +11,7 @@ Route::prefix('v1')->group(function () {
 	Route::prefix('products')->group(function () {
 		Route::get('/', [ProductController::class, 'index']);
 		Route::get('/new-arrival', [ProductController::class, 'new_arrival']);
+		Route::get('/{slug}', [ProductController::class, 'detail']);
 	});
 	Route::get('/banners', [BannerController::class, 'index']);
 
