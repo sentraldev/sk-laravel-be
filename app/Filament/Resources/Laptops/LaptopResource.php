@@ -35,10 +35,19 @@ class LaptopResource extends Resource
 
     public static function getPages(): array
     {
+        if (env('DISABLE_LAPTOPS_RESOURCE', false)) {
+            return [];
+        }
+
         return [
             'index' => ListLaptops::route('/'),
             'create' => CreateLaptop::route('/create'),
             'edit' => EditLaptop::route('/{record}/edit'),
         ];
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return ! (bool) env('DISABLE_LAPTOPS_RESOURCE', false);
     }
 }
