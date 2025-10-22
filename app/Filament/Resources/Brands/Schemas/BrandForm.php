@@ -20,6 +20,7 @@ class BrandForm
                     ->columnSpanFull(),
                 FileUpload::make('logo')
                     ->label('Logo')
+                    ->disk('public')
                     ->image() // ✅ restricts to images
                     ->imageEditor() // optional: adds crop/resize UI
                     ->maxSize(2048) // 2 MB limit
