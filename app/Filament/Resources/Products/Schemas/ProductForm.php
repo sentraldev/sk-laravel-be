@@ -108,48 +108,60 @@ class ProductForm
                     ->columnSpanFull(),
                 TextInput::make('price')
                     ->label('Price (Rp)')
-                    ->numeric()
                     ->prefix('Rp') // ✅ show Rp in UI
                     ->required()
-                    ->live(debounce: 300)
-                    ->afterStateUpdated(function (Set $set, Get $get, $state) {
-                        $price = (float) ($state ?? 0);
-                        $percent = $get('discount_value');
-                        $discounted = $get('discounted_price');
-                        if ($price > 0 && is_numeric($percent)) {
-                            $set('discounted_price', (int) round($price * (1 - ((int) $percent / 100))));
-                        } elseif ($price > 0 && is_numeric($discounted)) {
-                            $calc = (int) round(100 - (((float) $discounted / $price) * 100));
-                            $set('discount_value', max(0, min(100, $calc)));
+                    ->live()
+                    ->formatStateUsing(function ($state) {
+                        if ($state === null || $state === '') {
+                            return $state;
                         }
-                    }),
-                TextInput::make('discounted_price')
-                    ->label('Discounted Price (Rp)')
-                    ->numeric()
-                    ->prefix('Rp')
-                    ->live(debounce: 300)
-                    ->afterStateUpdated(function (Set $set, Get $get, $state) {
-                        $price = (float) ($get('price') ?? 0);
-                        $discounted = (float) ($state ?? 0);
-                        if ($price > 0 && $discounted >= 0) {
-                            $percent = (int) round(100 - (($discounted / $price) * 100));
-                            $set('discount_value', max(0, min(100, $percent)));
+                        // Price displayed without decimals by default
+                        return number_format($state, 0, ',', '.');
+                    })
+                    ->dehydrateStateUsing(function ($state) {
+                        // Convert ID-locale formatted string (1.234.567,89) to numeric for storage
+                        if (is_string($state)) {
+                            $clean = preg_replace('/[^0-9,\.]/', '', $state);
+                            $clean = str_replace('.', '', $clean); // remove thousand separators
+                            $clean = str_replace(',', '.', $clean); // convert decimal comma to dot
+                            return is_numeric($clean) ? (float) $clean : 0.0;
                         }
-                    }),
-                TextInput::make('discount_value')
-                    ->label('Discount %')
-                    ->numeric()
-                    ->minValue(0)
-                    ->maxValue(100)
-                    ->suffix('%')
-                    ->live(debounce: 300)
+                        return is_numeric($state) ? (float) $state : 0.0;
+                    })
                     ->afterStateUpdated(function (Set $set, Get $get, $state) {
-                        $price = (float) ($get('price') ?? 0);
-                        $percent = (int) ($state ?? 0);
-                        if ($price > 0 && $percent >= 0) {
-                            $discounted = round($price * (1 - ($percent / 100)));
-                            $set('discounted_price', $discounted);
+                        // Reformat inside the input using Indonesian separators
+                        if (is_string($state)) {
+                            $clean = preg_replace('/[^0-9,\.]/', '', $state);
+                            $clean = str_replace('.', '', $clean);
+                            $clean = str_replace(',', '.', $clean);
+                            $value = is_numeric($clean) ? (float) $clean : 0.0;
+                        } else {
+                            $value = is_numeric($state) ? (float) $state : 0.0;
                         }
+                        // For product price, display without decimal places by default
+                        $set('price', number_format($value, 0, ',', '.'));
+                    })
+                    ->rule(function () {
+                        return function (string $attribute, $value, $fail) {
+                            // Parse possibly localized input for validation
+                            if (is_string($value)) {
+                                $clean = preg_replace('/[^0-9,\.]/', '', $value);
+                                $clean = str_replace('.', '', $clean);
+                                $clean = str_replace(',', '.', $clean);
+                                $value = is_numeric($clean) ? (float) $clean : null;
+                            } elseif (is_numeric($value)) {
+                                $value = (float) $value;
+                            } else {
+                                $value = null;
+                            }
+                            if ($value === null) {
+                                $fail('The price must be a number.');
+                                return;
+                            }
+                            if ($value < 0) {
+                                $fail('The price cannot be negative.');
+                            }
+                        };
                     }),
                 TextInput::make('stock')
                     ->required()
@@ -163,11 +175,13 @@ class ProductForm
                     ->reorderable()
                     ->maxFiles(5) 
                     ->panelLayout('grid')
+                    ->columnSpanFull()
                     ->imageEditor() // optional: adds crop/resize UI
                     ->maxSize(2048) // 2 MB limit
                     ->directory('products') // stored in storage/app/public/brands
                     ->required(),
                 Toggle::make('is_active')
+                    ->default(true)
                     ->required(),
             ]);
     }

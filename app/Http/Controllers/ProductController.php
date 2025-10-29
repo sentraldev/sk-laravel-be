@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index(Request $request): ResourceCollection
     {
-        $products = Product::with(['brand', 'category'])
+        $products = Product::with(['brand', 'category', 'discount'])
             ->where('is_active', true)
             ->latest()
             ->paginate(20);
@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     public function new_arrival(Request $request): ResourceCollection
     {
-        $products = Product::with(['brand', 'category'])
+        $products = Product::with(['brand', 'category', 'discount'])
             ->where('is_active', true)
             ->latest()
             ->limit(6)
@@ -33,7 +33,7 @@ class ProductController extends Controller
 
     public function detail(string $slug): ProductResource
     {
-        $product = Product::with(['brand', 'category'])
+        $product = Product::with(['brand', 'category', 'discount'])
             ->where('is_active', true)
             ->where('slug', $slug)
             ->firstOrFail();
