@@ -177,7 +177,7 @@ class ProductForm
                     ->panelLayout('grid')
                     ->columnSpanFull()
                     ->imageEditor() // optional: adds crop/resize UI
-                    ->maxSize(2048) // 2 MB limit
+                    ->maxSize(500) // 500 KB per file
                     ->directory('products') // stored in storage/app/public/brands
                     ->required(),
                 Toggle::make('is_active')

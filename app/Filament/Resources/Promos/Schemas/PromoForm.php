@@ -28,7 +28,7 @@ class PromoForm
                     ->imageCropAspectRatio('1200:560')
                     ->imageResizeTargetWidth('1200')
                     ->imageResizeTargetHeight('560')
-                    ->maxSize(4096),
+                    ->maxSize(500),
                 TextInput::make('title')
                     ->required()
                     ->maxLength(255),

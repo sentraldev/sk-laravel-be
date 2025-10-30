@@ -23,7 +23,7 @@ class BrandForm
                     ->disk('public')
                     ->image() // ✅ restricts to images
                     ->imageEditor() // optional: adds crop/resize UI
-                    ->maxSize(2048) // 2 MB limit
+                    ->maxSize(500) // 500 KB per file
                     ->directory('brands'), // stored in storage/app/public/brands
             ]);
     }
