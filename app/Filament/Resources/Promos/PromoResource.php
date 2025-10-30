@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Promos;
 use App\Filament\Resources\Promos\Pages\CreatePromo;
 use App\Filament\Resources\Promos\Pages\EditPromo;
 use App\Filament\Resources\Promos\Pages\ListPromos;
+use App\Filament\Resources\Promos\RelationManagers\VouchersRelationManager;
 use App\Filament\Resources\Promos\Schemas\PromoForm;
 use App\Filament\Resources\Promos\Tables\PromosTable;
 use App\Models\Promo;
@@ -35,7 +36,7 @@ class PromoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // VouchersRelationManager::class,
         ];
     }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ShopLocationController;
+use App\Http\Controllers\PromoController;
 
 Route::prefix('v1')->group(function () {
 	Route::prefix('products')->group(function () {
@@ -26,5 +27,10 @@ Route::prefix('v1')->group(function () {
 
 	Route::prefix('location')->group(function () {
 		Route::get('/', [ShopLocationController::class,'index']);	
+	});
+
+	Route::prefix('promos')->group(function () {
+		Route::get('/', [PromoController::class, 'index']);
+		Route::get('/{slug}', [PromoController::class, 'detail']);
 	});
 });
