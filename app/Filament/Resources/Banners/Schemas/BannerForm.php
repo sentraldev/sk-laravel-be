@@ -27,7 +27,7 @@ class BannerForm
                     ->imageResizeTargetHeight('560')
                     ->imageResizeMode('cover')
                     ->imageResizeUpscale(false)
-                    ->maxSize(500)
+                    ->maxSize(1024)
                     ->columnSpanFull()
                     ->visibility('public')
                     ->required()

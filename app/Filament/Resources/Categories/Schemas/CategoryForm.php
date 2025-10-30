@@ -22,7 +22,7 @@ class CategoryForm
                     ->image()
                     ->disk('public')
                     ->imageEditor()
-                    ->maxSize(500)
+                    ->maxSize(1024)
                     ->directory('categories'),
                 Repeater::make('fields')
                     ->label('Detail')

@@ -24,7 +24,7 @@ class ShopLocationForm
                     ->disk('public')
                     ->directory('shop_locations')
                     ->image()
-                    ->maxSize(500)
+                    ->maxSize(1024)
                     ->columnSpanFull(),
 
                 TextInput::make('address')
