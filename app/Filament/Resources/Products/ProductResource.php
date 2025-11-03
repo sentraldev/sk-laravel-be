@@ -54,7 +54,7 @@ class ProductResource extends Resource
     public static function canViewAny(): bool
     {
         $user = auth()->user();
-        return $user && method_exists($user, 'hasRole') && $user->hasRole('product');
+        return $user && method_exists($user, 'can') && $user->can('manage products');
     }
 
     public static function canCreate(): bool

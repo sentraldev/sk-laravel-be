@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class ProductDiscountResource extends Resource
 {
@@ -45,5 +46,27 @@ class ProductDiscountResource extends Resource
             'create' => CreateProductDiscount::route('/create'),
             'edit' => EditProductDiscount::route('/{record}/edit'),
         ];
+    }
+
+    // Authorization: permission-gated (manage product discounts)
+    public static function canViewAny(): bool
+    {
+        $user = Auth::user();
+        return $user && method_exists($user, 'can') && $user->can('manage product discounts');
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canEdit($record): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canDelete($record): bool
+    {
+        return static::canViewAny();
     }
 }
