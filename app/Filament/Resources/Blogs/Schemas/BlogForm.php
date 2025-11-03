@@ -8,7 +8,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
+use Filament\Schemas\Components\Grid;
 use Illuminate\Support\Facades\Auth;
+use App\Models\BlogCategory;
 
 class BlogForm
 {
@@ -31,15 +33,28 @@ class BlogForm
                     ->columnSpanFull()
                     ->openable(),
 
-                TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
+                Grid::make(4)->schema([
+                    TextInput::make('title')
+                        ->required()
+                        ->maxLength(255)
+                        ->columnSpan(3),
 
-                // Slug is auto-generated in CreateBlog page; hide input to avoid manual edits/validation conflicts
-                TextInput::make('slug')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->hidden(),
+                    Select::make('blog_category_id')
+                        ->label('Category')
+                        ->relationship('category', 'name')
+                        ->searchable()
+                        ->preload()
+                        ->createOptionForm([
+                            TextInput::make('name')
+                                ->label('Category Name')
+                                ->required()
+                                ->maxLength(100),
+                        ])
+                        ->required()
+                        ->createOptionUsing(fn (array $data) => BlogCategory::create($data)->getKey())
+                        ->placeholder('Select category')
+                        ->columnSpan(1),
+                ])->columnSpanFull(),
 
                 Select::make('created_by')
                     ->label('Author')
@@ -68,6 +83,12 @@ class BlogForm
                 Toggle::make('is_published')
                     ->label('Published')
                     ->default(false),
+
+                // Slug is auto-generated in CreateBlog page; hide input to avoid manual edits/validation conflicts
+                TextInput::make('slug')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->hidden(),
             ]);
     }
 }

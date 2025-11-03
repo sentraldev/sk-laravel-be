@@ -26,6 +26,11 @@ class BlogsTable
                 ->searchable()
                 ->sortable(),
 
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('creator.name')
                     ->label('Author')
                     ->sortable()

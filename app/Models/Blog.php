@@ -12,6 +12,7 @@ class Blog extends Model
         'title',
         'slug',
         'image',
+        'blog_category_id',
         'content',
         'is_published',
         'created_by',
@@ -20,6 +21,11 @@ class Blog extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(BlogCategory::class, 'blog_category_id');
     }
 
     protected static function booted(): void

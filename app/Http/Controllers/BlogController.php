@@ -21,7 +21,7 @@ class BlogController extends Controller
         $perPage = $perPage > 0 && $perPage <= 100 ? $perPage : 10;
 
         $query = Blog::query()
-            ->with(['creator:id,name'])
+            ->with(['creator:id,name', 'category:id,name,slug'])
             ->where('is_published', true)
             ->orderByDesc('created_at');
 
@@ -37,7 +37,7 @@ class BlogController extends Controller
     public function recent(): AnonymousResourceCollection
     {
         $items = Blog::query()
-            ->with(['creator:id,name'])
+            ->with(['creator:id,name', 'category:id,name,slug'])
             ->where('is_published', true)
             ->orderByDesc('created_at')
             ->limit(5)
@@ -53,7 +53,7 @@ class BlogController extends Controller
     public function detail(string $slug)
     {
         $blog = Blog::query()
-            ->with(['creator:id,name'])
+            ->with(['creator:id,name', 'category:id,name,slug'])
             ->where('slug', $slug)
             ->where('is_published', true)
             ->first();

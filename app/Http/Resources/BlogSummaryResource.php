@@ -31,6 +31,13 @@ class BlogSummaryResource extends JsonResource
             'excerpt' => $excerpt,
             'image_url' => $imageUrl,
             'author' => optional($this->creator)->name,
+            'category' => $this->whenLoaded('category', function () {
+                return $this->category ? [
+                    'id' => $this->category->id,
+                    'name' => $this->category->name,
+                    'slug' => $this->category->slug,
+                ] : null;
+            }),
             'created_at' => optional($this->created_at)?->toIso8601String(),
         ];
     }

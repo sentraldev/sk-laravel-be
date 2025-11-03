@@ -29,6 +29,13 @@ class BlogDetailResource extends JsonResource
             'content_html' => $this->content, // stored as HTML from RichEditor
             'is_published' => (bool) $this->is_published,
             'author' => optional($this->creator)->name,
+            'category' => $this->whenLoaded('category', function () {
+                return $this->category ? [
+                    'id' => $this->category->id,
+                    'name' => $this->category->name,
+                    'slug' => $this->category->slug,
+                ] : null;
+            }),
             'created_at' => optional($this->created_at)?->toIso8601String(),
             'updated_at' => optional($this->updated_at)?->toIso8601String(),
         ];
