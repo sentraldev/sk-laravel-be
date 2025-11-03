@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
@@ -46,6 +47,13 @@ class UserResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        // Hide the protected super admin account from listings
+        return parent::getEloquentQuery()
+            ->where('email', '!=', 'admin@sentralkomputer.com');
+    }
+
     // Authorization: permission-gated (manage users)
     public static function canViewAny(): bool
     {
@@ -58,13 +66,28 @@ class UserResource extends Resource
         return static::canViewAny();
     }
 
+    public static function canView($record): bool
+    {
+        // Block viewing the protected account
+        if ($record && isset($record->email) && $record->email === 'admin@sentralkomputer.com') {
+            return false;
+        }
+        return static::canViewAny();
+    }
+
     public static function canEdit($record): bool
     {
+        if ($record && isset($record->email) && $record->email === 'admin@sentralkomputer.com') {
+            return false;
+        }
         return static::canViewAny();
     }
 
     public static function canDelete($record): bool
     {
+        if ($record && isset($record->email) && $record->email === 'admin@sentralkomputer.com') {
+            return false;
+        }
         return static::canViewAny();
     }
 }
