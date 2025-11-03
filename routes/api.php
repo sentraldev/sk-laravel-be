@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ShopLocationController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\BlogController;
 
 Route::prefix('v1')->group(function () {
 	Route::prefix('products')->group(function () {
@@ -32,5 +33,11 @@ Route::prefix('v1')->group(function () {
 	Route::prefix('promos')->group(function () {
 		Route::get('/', [PromoController::class, 'index']);
 		Route::get('/{slug}', [PromoController::class, 'detail']);
+	});
+
+	Route::prefix('blogs')->group(function () {
+		Route::get('/', [BlogController::class, 'index']);
+		Route::get('/recent', [BlogController::class, 'recent']);
+		Route::get('/{slug}', [BlogController::class, 'detail']);
 	});
 });
