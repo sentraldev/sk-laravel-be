@@ -27,5 +27,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Laptop'],
             ['slug' => Str::slug('Laptop')]
         );
+
+        // Seed roles and permissions for each Filament resource
+        $this->call([
+            AdminRoleSeeder::class,
+            FilamentResourcePermissionsSeeder::class,
+        ]);
     }
 }

@@ -15,6 +15,16 @@ class BrandResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $imageUrl = $this->logo ? (config('app.url') . Storage::url($this->logo)) : null;
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'description' => $this->description,
+            'logo' => $imageUrl,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

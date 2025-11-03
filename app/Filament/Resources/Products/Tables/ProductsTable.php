@@ -72,7 +72,10 @@ class ProductsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                // Example JSONB filter for RAM size = 8
+                Tables\Filters\Filter::make('ram_size_is_8')
+                    ->label('RAM = 8 GB')
+                    ->query(fn ($query) => $query->whereRaw("(details->>'ram_size')::int = 8")),
             ])
             ->recordActions([
                 EditAction::make(),

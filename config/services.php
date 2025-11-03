@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'firebase_storage' => [
+        'bucket' => env('FIREBASE_STORAGE_BUCKET'),
+        'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
+        // Either a path to a service account JSON file or raw JSON contents
+        'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
+    ],
+
 ];

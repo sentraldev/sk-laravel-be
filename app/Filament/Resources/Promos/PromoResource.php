@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Promos;
 use App\Filament\Resources\Promos\Pages\CreatePromo;
 use App\Filament\Resources\Promos\Pages\EditPromo;
 use App\Filament\Resources\Promos\Pages\ListPromos;
+use App\Filament\Resources\Promos\RelationManagers\VouchersRelationManager;
 use App\Filament\Resources\Promos\Schemas\PromoForm;
 use App\Filament\Resources\Promos\Tables\PromosTable;
 use App\Models\Promo;
@@ -14,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class PromoResource extends Resource
 {
@@ -35,7 +37,7 @@ class PromoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // VouchersRelationManager::class,
         ];
     }
 
@@ -46,5 +48,27 @@ class PromoResource extends Resource
             'create' => CreatePromo::route('/create'),
             'edit' => EditPromo::route('/{record}/edit'),
         ];
+    }
+
+    // Authorization: permission-gated (manage promos)
+    public static function canViewAny(): bool
+    {
+        $user = Auth::user();
+        return $user && method_exists($user, 'can') && $user->can('manage promos');
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canEdit($record): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canDelete($record): bool
+    {
+        return static::canViewAny();
     }
 }

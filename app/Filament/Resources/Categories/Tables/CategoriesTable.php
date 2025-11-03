@@ -22,8 +22,8 @@ class CategoriesTable
                     ->height(60),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
+                // TextColumn::make('slug')
+                //     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

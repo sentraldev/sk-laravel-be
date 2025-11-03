@@ -40,7 +40,8 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            // Allow overriding the public disk root via env; default remains storage_path('app/public')
+            'root' => env('PUBLIC_DISK_ROOT', storage_path('app/public')),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
@@ -74,7 +75,8 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        // Point the public/storage symlink to the configured public disk root
+        public_path('storage') => env('PUBLIC_DISK_ROOT', storage_path('app/public')),
     ],
 
 ];
