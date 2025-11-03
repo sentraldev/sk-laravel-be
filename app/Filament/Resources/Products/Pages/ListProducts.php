@@ -27,6 +27,7 @@ class ListProducts extends ListRecords
                         ->helperText('Upload files named like SKU-1.jpg, SKU-2.png. They will be attached to the product matching the SKU (case-insensitive).')
                         ->multiple()
                         ->image()
+                        ->maxSize(1024)
                         ->preserveFilenames()
                         ->disk('public')
                         ->directory('imports/products')

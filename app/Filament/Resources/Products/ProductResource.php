@@ -49,4 +49,26 @@ class ProductResource extends Resource
             'edit' => EditProduct::route('/{record}/edit'),
         ];
     }
+
+    // Authorization: Only admins can view/manage users
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('product');
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canEdit($record): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canDelete($record): bool
+    {
+        return static::canViewAny();
+    }
 }
