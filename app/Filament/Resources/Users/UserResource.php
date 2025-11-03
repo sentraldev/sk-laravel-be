@@ -15,6 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -49,9 +50,15 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        // Hide the protected super admin account from listings
-        return parent::getEloquentQuery()
-            ->where('email', '!=', 'admin@sentralkomputer.com');
+        // Hide the protected super admin account from listings for everyone except the super admin themselves
+        $user = Auth::user();
+        $query = parent::getEloquentQuery();
+
+        if (! $user || $user->email !== 'admin@sentralkomputer.com') {
+            $query->where('email', '!=', 'admin@sentralkomputer.com');
+        }
+
+        return $query;
     }
 
     // Authorization: permission-gated (manage users)
@@ -68,25 +75,30 @@ class UserResource extends Resource
 
     public static function canView($record): bool
     {
-        // Block viewing the protected account
+        $user = Auth::user();
         if ($record && isset($record->email) && $record->email === 'admin@sentralkomputer.com') {
-            return false;
+            // Only the super admin themselves can view their record
+            return $user && $user->email === 'admin@sentralkomputer.com';
         }
         return static::canViewAny();
     }
 
     public static function canEdit($record): bool
     {
+        $user = Auth::user();
         if ($record && isset($record->email) && $record->email === 'admin@sentralkomputer.com') {
-            return false;
+            // Only the super admin themselves can edit their record
+            return $user && $user->email === 'admin@sentralkomputer.com';
         }
         return static::canViewAny();
     }
 
     public static function canDelete($record): bool
     {
+        $user = Auth::user();
         if ($record && isset($record->email) && $record->email === 'admin@sentralkomputer.com') {
-            return false;
+            // Avoid accidental deletion of the super admin account; only allow self-delete if desired
+            return $user && $user->email === 'admin@sentralkomputer.com';
         }
         return static::canViewAny();
     }

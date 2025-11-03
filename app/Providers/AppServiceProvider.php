@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,5 +33,10 @@ class AppServiceProvider extends ServiceProvider
         | Request::HEADER_X_FORWARDED_PORT
         | Request::HEADER_X_FORWARDED_PROTO
         );
+
+        // Set date/time localization for Carbon & Date facade
+        $locale = config('app.locale');
+        Carbon::setLocale($locale);
+        Date::setLocale($locale);
     }
 }
